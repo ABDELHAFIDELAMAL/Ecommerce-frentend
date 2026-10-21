@@ -1,0 +1,39 @@
+<div>
+  <h1>Products : </h1>
+  <div>
+    @if(products().length > 0) {
+      @for(product of products() ; track product.id){
+        <div>
+          <div>
+            <img
+              [src]="'http://localhost:8090' + product.images"
+              [alt]="product.images.at(0)"
+              class="w-md h-auto rounded-2xl shadow"
+            >
+          </div>
+          @for (image of product.images ; track image.id){
+            <div class="w-full h-xl flex align-center justify-between gap-4">
+              <img
+                [src]="'http://localhost:8090' + image.imageUrl"
+                [alt]="image.altText"
+                class="w-md h-auto rounded-2xl shadow"
+              >
+            </div>
+          }
+          <div>
+            <h1>Name : {{ product.name }}</h1>
+            <h2>Brand : {{ product.brand}}</h2>
+            <p>Description : {{ product.description }}</p>
+            <h4>Quantity : {{ product.quantity }} </h4>
+            <h3>average rating : {{ product.averageRating}}</h3>
+            <button>Price : {{ product.price}} $</button>
+          </div>
+        </div>
+      }
+    } @else {
+      <div>
+        <h1>Product list is empty !! </h1>
+      </div>
+    }
+  </div>
+</div>

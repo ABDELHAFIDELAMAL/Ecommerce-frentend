@@ -1,0 +1,9 @@
+<div>
+  @for(image of images() ; track image.id ){
+    <img
+      [src]="'http://localhost:8090' + image.imageUrl"
+      [alt]="image.altText"
+      class="w-2xl rounded-2xl shadow"
+    >
+  }
+</div>
