@@ -15,12 +15,14 @@ export class ImageService {
     return this.http.get<ApiResponse<(Image)[]>>(this.apiUrl);
   }
 
-  uploadImage(productId: number , file : File , altText : string):Observable<ApiResponse<Image>> {
-    const params = new HttpParams();
-      params.set('productId', productId);
-      params.set('altText', altText);
+  uploadImage(productId: number, file: File, altText: string): Observable<ApiResponse<Image>> {
+    const params = new HttpParams()
+      .set('productId', productId)
+      .set('altText', altText);
+
     const data = new FormData();
     data.append('file', file);
-    return this.http.post<ApiResponse<Image>>(`${this.apiUrl}/upload`, data , {params});
+
+    return this.http.post<ApiResponse<Image>>(`${this.apiUrl}/upload`, data, { params });
   }
 }
