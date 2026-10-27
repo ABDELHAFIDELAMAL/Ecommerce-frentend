@@ -1,4 +1,6 @@
 import { Service } from '@angular/core';
 
 @Service()
-export class CartItemService {}
+export class CartItemService {
+
+}

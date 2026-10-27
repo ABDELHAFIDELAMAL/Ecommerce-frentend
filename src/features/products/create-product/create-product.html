@@ -1,1 +1,157 @@
-<p>create-product works!</p>
+<form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="space-y-5">
+
+  <div>
+    <label class="mb-1 block text-sm font-medium">Name</label>
+    <input
+      type="text"
+      formControlName="name"
+      class="w-full rounded-lg border px-3 py-2 outline-none"
+      placeholder="Product name"
+    />
+
+    <div
+      *ngIf="productForm.get('name')?.touched && productForm.get('name')?.invalid"
+      class="mt-1 text-sm text-red-500"
+    >
+      <p *ngIf="productForm.get('name')?.hasError('required')">
+        Name is required.
+      </p>
+      <p *ngIf="productForm.get('name')?.hasError('minlength')">
+        Name must contain at least 3 characters.
+      </p>
+      <p *ngIf="productForm.get('name')?.hasError('maxlength')">
+        Name must not exceed 100 characters.
+      </p>
+    </div>
+  </div>
+
+  <div>
+    <label class="mb-1 block text-sm font-medium">Price</label>
+    <input
+      type="number"
+      formControlName="price"
+      class="w-full rounded-lg border px-3 py-2 outline-none"
+      placeholder="Price"
+    />
+
+    <div
+      *ngIf="productForm.get('price')?.touched && productForm.get('price')?.invalid"
+      class="mt-1 text-sm text-red-500"
+    >
+      <p *ngIf="productForm.get('price')?.hasError('required')">
+        Price is required.
+      </p>
+      <p *ngIf="productForm.get('price')?.hasError('min')">
+        Price must be greater than or equal to 0.
+      </p>
+    </div>
+  </div>
+
+  <div>
+    <label class="mb-1 block text-sm font-medium">Quantity</label>
+    <input
+      type="number"
+      formControlName="quantity"
+      class="w-full rounded-lg border px-3 py-2 outline-none"
+      placeholder="Quantity"
+    />
+
+    <div
+      *ngIf="productForm.get('quantity')?.touched && productForm.get('quantity')?.invalid"
+      class="mt-1 text-sm text-red-500"
+    >
+      <p *ngIf="productForm.get('quantity')?.hasError('required')">
+        Quantity is required.
+      </p>
+      <p *ngIf="productForm.get('quantity')?.hasError('min')">
+        Quantity cannot be negative.
+      </p>
+    </div>
+  </div>
+
+  <div>
+    <label class="mb-1 block text-sm font-medium">Brand</label>
+    <input
+      type="text"
+      formControlName="brand"
+      class="w-full rounded-lg border px-3 py-2 outline-none"
+      placeholder="Brand"
+    />
+
+    <div
+      *ngIf="productForm.get('brand')?.touched && productForm.get('brand')?.invalid"
+      class="mt-1 text-sm text-red-500"
+    >
+      <p *ngIf="productForm.get('brand')?.hasError('minlength')">
+        Brand must contain at least 2 characters.
+      </p>
+      <p *ngIf="productForm.get('brand')?.hasError('maxlength')">
+        Brand must not exceed 50 characters.
+      </p>
+    </div>
+  </div>
+
+  <div>
+    <label class="mb-1 block text-sm font-medium">Description</label>
+    <textarea
+      formControlName="description"
+      rows="4"
+      class="w-full rounded-lg border px-3 py-2 outline-none"
+      placeholder="Product description"
+    ></textarea>
+
+    <div
+      *ngIf="productForm.get('description')?.touched && productForm.get('description')?.invalid"
+      class="mt-1 text-sm text-red-500"
+    >
+      <p *ngIf="productForm.get('description')?.hasError('minlength')">
+        Description must contain at least 10 characters.
+      </p>
+      <p *ngIf="productForm.get('description')?.hasError('maxlength')">
+        Description must not exceed 500 characters.
+      </p>
+    </div>
+  </div>
+
+  <div>
+    <label class="mb-1 block text-sm font-medium">Category</label>
+    <select
+      formControlName="category"
+      class="w-full rounded-lg border px-3 py-2 outline-none"
+    >
+      <option [ngValue]="null">Select category</option>
+
+      <option
+        *ngFor="let category  of categories()"
+        [ngValue]="category.id"
+      >
+        {{ category.name }}
+      </option>
+    </select>
+
+    <p
+      *ngIf="productForm.get('category')?.touched && productForm.get('category')?.hasError('required')"
+      class="mt-1 text-sm text-red-500"
+    >
+      Category is required.
+    </p>
+  </div>
+
+  <div class="flex items-center gap-2">
+    <input
+      type="checkbox"
+      formControlName="active"
+      id="active"
+    />
+    <label for="active" class="text-sm font-medium">Active</label>
+  </div>
+
+  <button
+    type="submit"
+    [disabled]="productForm.invalid"
+    class="w-full rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
+  >
+    Create Product
+  </button>
+
+</form>
