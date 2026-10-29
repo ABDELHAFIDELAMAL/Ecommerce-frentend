@@ -1,83 +1,85 @@
-<div class="grid grid-cols-1 gap-6 bg-white p-4 sm:grid-cols-2 lg:grid-cols-3">
-
-  @for (product of products(); track product.id) {
-
-    <div class="w-full overflow-hidden rounded-xl border border-gray-200 bg-white">
-      <div class="relative flex h-72 items-center justify-center bg-white">
-        @if (product.images?.length) {
-          <img
-            [src]="'http://localhost:8090' + selectedImages()[product.id] || product.images[0].imageUrl"
-            [alt]="product.name"
-            class="h-full w-full object-contain"
-          />
-        } @else {
-          <div class="text-sm text-gray-400">
-            No image available
-          </div>
-        }
-
-      </div>
-      @if (product.images?.length) {
-
-        <div class="flex gap-2 overflow-x-auto px-3 py-3">
-
-          @for (image of product.images; track image.id) {
-
-            <button
-              type="button"
-              (click)="selectImage(product.id, image.imageUrl)"
-              class="h-16 w-16 shrink-0 overflow-hidden rounded-md border-2 bg-white"
-              [class.border-red-500]="
-                (selectedImages()[product.id] ||
-                  product.images[0]?.imageUrl) === image.imageUrl
-              "
-              [class.border-gray-200]="
-                (selectedImages()[product.id] ||
-                  product.images[0]?.imageUrl) !== image.imageUrl
-              "
-            >
-
-              <img
-                [src]="'http://localhost:8090' + image.imageUrl"
-                [alt]="image.altText || product.name"
-                class="h-full w-full object-contain"
-              />
-
-            </button>
-
-          }
-
-        </div>
-
-      }
-
-      <!-- Informations produit -->
-      <div class="border-t border-gray-100 p-4">
-
-        <h2 class="line-clamp-2 text-base font-semibold text-gray-900">
-          {{ product.name }}
-        </h2>
-
-        <p class="mt-2 text-xl font-bold text-red-600">
-          {{ product.price }} DH
-        </p>
-
-        <p class="mt-2 line-clamp-3 text-sm text-gray-500">
-          {{ product.description }}
-        </p>
-
-        <!-- Bouton -->
-        <button
-          type="button"
-          class="mt-4 w-full rounded-lg bg-black px-4 py-3 font-medium text-white transition hover:bg-gray-800"
-        >
-          View product
-        </button>
-
-      </div>
-
+<div class="min-h-screen bg-gray-50 px-3 py-5 sm:px-5">
+  <div class="mx-auto max-w-6xl">
+    <div class="mb-5">
+      <h1 class="text-2xl font-bold text-gray-900">Products</h1>
+      <p class="text-xs text-gray-500">Discover our latest products</p>
     </div>
 
-  }
+    @if (products().length > 0) {
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        @for (product of products(); track product.id) {
+          <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100">
+            <div class="p-2">
+              @if (product.images && product.images.length > 0) {
+                <div class="aspect-square overflow-hidden rounded-lg bg-gray-100">
+                  <img
+                    [src]="'http://localhost:8090' + (selectedImages()[product.id] || product.images[0].imageUrl)"
+                    [alt]="product.name"
+                    class="h-full w-full object-cover"
+                  />
+                </div>
 
+                <div class="mt-1 flex gap-1 overflow-x-auto">
+                  @for (image of product.images; track image.id) {
+                    <button
+                      type="button"
+                      (click)="selectImage(product.id, image.imageUrl)"
+                      class="h-10 w-10 shrink-0 overflow-hidden rounded-md border bg-white"
+                      [class.border-black]="(selectedImages()[product.id] || product.images[0].imageUrl) === image.imageUrl"
+                      [class.border-gray-200]="(selectedImages()[product.id] || product.images[0].imageUrl) !== image.imageUrl"
+                    >
+                      <img
+                        [src]="'http://localhost:8090' + image.imageUrl"
+                        [alt]="image.altText || product.name"
+                        class="h-full w-full object-cover"
+                      />
+                    </button>
+                  }
+                </div>
+              } @else {
+                <div class="flex aspect-square items-center justify-center rounded-lg bg-gray-100 text-xs text-gray-400">
+                  No image
+                </div>
+              }
+            </div>
+
+            <div class="px-3 pb-3">
+              <p class="text-[10px] uppercase text-gray-400">{{ product.brand }}</p>
+              <h2 class="mt-0.5 line-clamp-1 text-sm font-bold text-gray-900">{{ product.name }}</h2>
+              <p class="mt-1 line-clamp-1 text-[11px] text-gray-500">{{ product.description }}</p>
+
+              <div class="mt-1 flex items-center gap-1">
+                <span class="text-xs text-yellow-400">★</span>
+                <span class="text-xs font-semibold">{{ product.averageRating }}</span>
+                <span class="text-[10px] text-gray-400">({{ product.reviewCount }})</span>
+              </div>
+
+              <div class="mt-2 flex items-center justify-between">
+                <div>
+                  <p class="text-lg font-bold text-gray-900">{{ product.price }} €</p>
+                  <p class="text-[10px] text-gray-400">{{ product.quantity }} available</p>
+                </div>
+
+                <button
+                  type="button"
+                  [disabled]="!product.active || product.quantity <= 0"
+                  class="rounded-lg bg-black px-3 py-2 text-xs font-semibold text-white hover:bg-gray-800 disabled:bg-gray-300"
+                >
+                  Add to cart
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="flex min-h-[300px] items-center justify-center rounded-xl bg-white">
+        <div class="text-center">
+          <div class="mb-2 text-4xl">🛍️</div>
+          <h2 class="text-lg font-bold text-gray-900">No products found</h2>
+          <p class="mt-1 text-xs text-gray-500">There are currently no products available.</p>
+        </div>
+      </div>
+    }
+  </div>
 </div>
