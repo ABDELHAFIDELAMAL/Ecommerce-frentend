@@ -2,9 +2,12 @@ import {Component, inject, signal} from '@angular/core';
 import {CartService} from '../../services/cart-service/cart-service';
 import {Router} from '@angular/router';
 import {Cart} from '../../entities/Cart';
+import {DecimalPipe} from '@angular/common';
 
 @Component({
-  imports: [],
+  imports: [
+    DecimalPipe
+  ],
   selector: 'app-cart-component',
   styleUrl: './cart-component.css',
   templateUrl: './cart-component.html',
@@ -30,6 +33,7 @@ export class CartComponent {
       }
     })
   }
+
 
 
   getCartByUserById(id : number) : void {
