@@ -1,9 +1,11 @@
-<div>
-  @for(image of images() ; track image.id ){
-    <img
-      [src]="'http://localhost:8090' + image.imageUrl"
-      [alt]="image.altText"
-      class="w-2xl rounded-2xl shadow"
-    >
+<div class="columns-2 gap-3 space-y-3 sm:columns-3 md:columns-4 lg:columns-5">
+  @for (image of images(); track image.id) {
+    <div class="mb-3 break-inside-avoid overflow-hidden rounded-xl">
+      <img
+        [src]="'http://localhost:8090' + image.imageUrl"
+        [alt]="image.altText"
+        class="h-auto w-full rounded-xl object-cover transition duration-300 hover:scale-105"
+      >
+    </div>
   }
 </div>
