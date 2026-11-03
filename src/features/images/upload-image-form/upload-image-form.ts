@@ -41,9 +41,11 @@ export class UploadImageForm {
     const file = this.uploadImageForm.value.file!;
     const altText = this.uploadImageForm.value.altText!;
 
-    this.imageService.uploadImage(4, file, altText).subscribe({
+    this.imageService.uploadImage(26, file, altText).subscribe({
       next: (res) => {
         console.log('success', res);
+        alert(res.message);
+        this.route.navigate(['/store']).then();
         this.uploadImageForm.reset();
         this.previewUrl = null;
       },
@@ -51,31 +53,4 @@ export class UploadImageForm {
     });
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  uploadImage(productId : number , file : File , altText : string) : void {
-    this.imageService.uploadImage(productId , file , altText ).subscribe({
-      next: response => {
-        alert(response.message);
-        this.route.navigate(['/store']).then();
-      },
-      error: error => {
-        alert(error.message);
-      }
-    })
-  }
 }

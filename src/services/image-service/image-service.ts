@@ -25,4 +25,12 @@ export class ImageService {
 
     return this.http.post<ApiResponse<Image>>(`${this.apiUrl}/upload`, data, { params });
   }
+
+  getImageById(id:number) : Observable<ApiResponse<Image>>{
+    return this.http.get<ApiResponse<Image>>(`${this.apiUrl}/${id}`);
+  }
+
+  deleteImage(id : number):Observable<ApiResponse<void>>{
+    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/delete/${id}`);
+  }
 }

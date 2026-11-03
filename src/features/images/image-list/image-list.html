@@ -1,6 +1,6 @@
 <div class="columns-2 gap-3 space-y-3 sm:columns-3 md:columns-4 lg:columns-5">
   @for (image of images(); track image.id) {
-    <div class="mb-3 break-inside-avoid overflow-hidden rounded-xl">
+    <div class="mb-3 break-inside-avoid overflow-hidden rounded-xl shadow-md">
       <img
         [src]="'http://localhost:8090' + image.imageUrl"
         [alt]="image.altText"

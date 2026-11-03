@@ -1,4 +1,4 @@
-<form [formGroup]="uploadImageForm" (ngSubmit)="submit()">
+<form [formGroup]="uploadImageForm" (ngSubmit)="submit()" class="p-4 bg-blue-200">
   <input type="text" formControlName="altText" placeholder="Alt text" class="form-control mb-2">
   <input type="file" (change)="onFileSelected($event)" class="form-control mb-2">
   <img *ngIf="previewUrl" [src]="previewUrl" width="120" class="mb-2 rounded">
