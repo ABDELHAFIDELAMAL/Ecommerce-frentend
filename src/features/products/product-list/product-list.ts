@@ -17,9 +17,20 @@ export class ProductList {
 
   selectedImages = signal<{ [productId: number]: string }>({});
 
-  ngOnInit(): void {
-    this.getAllProducts();
+
+  loading = signal(true);
+  skeletons = Array.from({ length: 8 });
+
+  ngOnInit() {
+    this.productService.getAllProducts().subscribe({
+      next: (data) => {
+        this.products.set(data.data);
+        this.loading.set(false);
+      },
+      error: () => this.loading.set(false),
+    });
   }
+
 
   getAllProducts(): void {
     this.productService.getAllProducts().subscribe({
