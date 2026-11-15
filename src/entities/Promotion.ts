@@ -3,7 +3,7 @@ import {DiscountType} from '../enums/DiscountType.enum';
 
 
 export interface Promotion {
-  id: number;
+  id?: number;
   name : string;
   description : string;
   discountValue : number ;
@@ -11,5 +11,5 @@ export interface Promotion {
   active : boolean;
   startDate : Date ;
   endDate : Date ;
-  products : Product[] ;
+  products?: Product[] ;
 }
