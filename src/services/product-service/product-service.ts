@@ -63,4 +63,12 @@ export class ProductService {
     return this.http.get<ApiResponse<Review[]>>(`${this.apiUrl}/reviews/${productId}`);
   }
 
+  applyPromotionToProduct(productId: number, promotionId: number): Observable<ApiResponse<Product>> {
+    return this.http.post<ApiResponse<Product>>(`${this.apiUrl}/${productId}/promotions/${promotionId}` , null);
+  }
+
+  calculateDiscountedPrice(productId: number, promotionId: number): Observable<ApiResponse<number>> {
+    return this.http.get<ApiResponse<number>>(`${this.apiUrl}/${productId}/promotions/${promotionId}/discounted-price`);
+  }
+
 }
