@@ -23,26 +23,14 @@ export class ProductList {
 
   ngOnInit() {
     this.productService.getAllProducts().subscribe({
-      next: (data) => {
-        this.products.set(data.data);
+      next: (response) => {
+        this.products.set(response.data);
         this.loading.set(false);
       },
       error: () => this.loading.set(false),
     });
   }
 
-
-  getAllProducts(): void {
-    this.productService.getAllProducts().subscribe({
-      next: response => {
-        console.log(response.message, response.data);
-        this.products.set(response.data);
-      },
-      error: error => {
-        console.log('Error getAllProducts:', error);
-      }
-    });
-  }
 
   selectImage(productId: number, imageUrl: string): void {
     this.selectedImages.update(images => ({

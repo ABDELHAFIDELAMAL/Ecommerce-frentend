@@ -1,8 +1,185 @@
+@if (product(); as p) {
+  <section class="min-h-screen bg-white px-4 py-8 sm:px-6 lg:px-10">
+    <div class="mx-auto grid max-w-7xl grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-10">
 
-<div>
-  <button class="py-2 px-1 rounded shadow bg-red-500"
-          (click)="deleteImage(50)"
-  >
-    delete Image
-  </button>
-</div>
+      <div class="flex flex-col-reverse gap-3 sm:flex-row">
+        <div class="flex gap-3 overflow-x-auto sm:w-20 sm:flex-col sm:overflow-x-visible">
+          @for (image of p.images; track image.id) {
+            <button
+              type="button"
+              (click)="selectImage(image.imageUrl)"
+              class="h-20 w-20 shrink-0 overflow-hidden rounded-lg border-2 bg-white p-1 transition"
+              [class.border-purple-600]="selectedImage() === image.imageUrl"
+              [class.border-gray-200]="selectedImage() !== image.imageUrl"
+            >
+              <img
+                [src]="'http://localhost:8090' + image.imageUrl"
+                [alt]="p.name"
+                class="h-full w-full object-contain"
+              />
+            </button>
+          }
+        </div>
+
+        <div class="relative flex min-h-80 flex-1 items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-white p-5 sm:min-h-[420px] lg:min-h-[480px]">
+          @if (selectedImage()) {
+            <img
+              [src]="'http://localhost:8090' + selectedImage()!"
+              [alt]="p.name"
+              class="h-full max-h-115 w-full object-contain"
+            />
+          } @else {
+            <div class="flex flex-col items-center gap-2 text-gray-400">
+              <span class="material-icons text-6xl">image</span>
+              <span>No image available</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="flex flex-col">
+        <div class="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <p class="mb-2 text-sm font-medium uppercase tracking-wider text-gray-400">
+              {{ p.category?.name }}
+            </p>
+            <h1 class="text-2xl font-bold leading-tight text-gray-900 sm:text-3xl">
+              {{ p.name }}
+            </h1>
+            <p class="mt-2 text-sm text-gray-500">
+              Product code #{{ p.id }}
+              @if (p.brand) {
+                <span class="mx-2">|</span>
+                {{ p.brand }}
+              }
+            </p>
+          </div>
+          <span class="rounded-md bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700">
+            {{ p.brand || 'Product' }}
+          </span>
+        </div>
+
+        <div class="mt-5 flex flex-wrap items-center gap-3">
+          <div class="flex items-center text-yellow-400">
+            @for (star of [1, 2, 3, 4, 5]; track star) {
+              <span class="material-icons text-lg">
+                {{ star <= p.averageRating ? 'star' : 'star_border' }}
+              </span>
+            }
+          </div>
+          <span class="text-sm font-semibold text-gray-800">
+            {{ p.averageRating }}
+          </span>
+          <span class="text-sm text-gray-500">
+            ({{ p.reviewCount }} reviews)
+          </span>
+        </div>
+
+        <div class="my-6 border-t border-gray-200"></div>
+
+        <div class="grid grid-cols-2 gap-5">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">
+              Price
+            </p>
+            <p class="mt-1 text-3xl font-bold text-gray-900">
+              {{ p.price | currency:'USD':'symbol':'1.2-2' }}
+            </p>
+          </div>
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">
+              Quantity available
+            </p>
+            <p class="mt-2 text-2xl font-bold text-gray-900">
+              {{ p.quantity }}
+            </p>
+          </div>
+        </div>
+
+        @if (p.description) {
+          <p class="mt-6 text-sm leading-7 text-gray-600">
+            {{ p.description }}
+          </p>
+        }
+
+        <div class="mt-7 flex flex-col gap-3 sm:flex-row">
+          <div class="flex h-14 items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-3 sm:w-32">
+            <button
+              type="button"
+              (click)="decreaseQuantity()"
+              [disabled]="quantity() <= 1"
+              class="flex h-9 w-9 items-center justify-center rounded-md text-gray-600 hover:bg-gray-200 disabled:opacity-40"
+            >
+              <span class="material-icons">remove</span>
+            </button>
+
+            <span class="font-semibold text-gray-900">{{ quantity() }}</span>
+
+            <button
+              type="button"
+              (click)="increaseQuantity()"
+              [disabled]="quantity() >= p.quantity"
+              class="flex h-9 w-9 items-center justify-center rounded-md text-gray-600 hover:bg-gray-200 disabled:opacity-40"
+            >
+              <span class="material-icons">add</span>
+            </button>
+          </div>
+
+          <button
+            type="button"
+            [disabled]="!p.active || p.quantity === 0"
+            class="flex h-14 flex-1 items-center justify-center gap-3 rounded-lg bg-amber-400 px-5 font-semibold text-gray-900 transition hover:bg-amber-500 disabled:cursor-not-allowed disabled:bg-gray-300"
+          >
+            <span class="material-icons">add_box</span>
+            Add to cart
+          </button>
+        </div>
+
+        <div class="mt-5 rounded-xl border border-gray-200 p-5">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span class="flex h-10 w-10 items-center justify-center rounded-full border border-green-200 text-green-600">
+                <span class="material-icons">local_shipping</span>
+              </span>
+              <div>
+                <p
+                  class="text-sm font-semibold"
+                  [class.text-green-600]="p.active && p.quantity > 0"
+                  [class.text-red-500]="!p.active || p.quantity === 0"
+                >
+                  {{ p.active && p.quantity > 0 ? 'In Stock' : 'Out of Stock' }}
+                </p>
+                <p class="text-xs text-gray-500">
+                  {{ p.quantity }} units available
+                </p>
+              </div>
+            </div>
+            <span class="text-sm text-gray-500">Fast delivery</span>
+          </div>
+
+          <div class="my-5 border-t border-gray-200"></div>
+
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div class="flex items-center gap-3">
+              <span class="flex h-9 w-9 items-center justify-center rounded-full bg-purple-50 text-purple-600">
+                <span class="material-icons text-xl">local_offer</span>
+              </span>
+              <span class="text-sm text-gray-600">Special offers</span>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <span class="flex h-9 w-9 items-center justify-center rounded-full bg-purple-50 text-purple-600">
+                <span class="material-icons text-xl">schedule</span>
+              </span>
+              <span class="text-sm text-gray-600">Customer support</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+} @else {
+  <div class="flex min-h-100 items-center justify-center">
+    <p class="text-gray-500">Loading product details...</p>
+  </div>
+}

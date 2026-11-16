@@ -5,9 +5,10 @@ import {ProductList} from '../features/products/product-list/product-list';
 import {ImageList} from '../features/images/image-list/image-list';
 import {UploadImageForm} from '../features/images/upload-image-form/upload-image-form';
 import {ProductDetails} from '../features/products/product-details/product-details';
+import {ReviewList} from '../features/review/review-list/review-list';
 
 @Component({
-  imports: [RouterOutlet, Header, ProductList, ImageList, UploadImageForm, ProductDetails],
+  imports: [RouterOutlet, Header, ProductList, ImageList, UploadImageForm, ProductDetails, ReviewList],
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',

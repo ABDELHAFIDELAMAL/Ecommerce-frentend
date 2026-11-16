@@ -1,0 +1,124 @@
+
+<div class="min-h-screen bg-gray-50 p-6">
+
+  <div class="max-w-6xl mx-auto">
+
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">Customer Reviews</h1>
+        <p class="text-sm text-gray-500 mt-1">
+          Manage and view all customer reviews
+        </p>
+      </div>
+
+      <span class="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg text-sm font-semibold">
+        {{ reviews().length }} Reviews
+      </span>
+    </div>
+
+    <div class="space-y-4">
+
+      @for (review of reviews(); track review.id) {
+
+        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition">
+
+          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+
+            <div class="flex-1">
+
+              <div class="flex items-center gap-3 mb-3">
+
+                <div class="w-11 h-11 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
+                  {{ review.user.firstName.charAt(0) }}{{ review.user.lastName.charAt(0) }}
+                </div>
+
+                <div>
+                  <h3 class="font-semibold text-gray-900">
+                    {{ review.user.firstName }} {{ review.user.lastName }}
+                  </h3>
+
+                  <p class="text-xs text-gray-500">
+                    {{ review.user.email }}
+                  </p>
+                </div>
+
+              </div>
+
+              <div class="flex items-center gap-1 mb-3">
+
+                @for (star of [1,2,3,4,5]; track star) {
+                  <span
+                    class="text-xl"
+                    [class.text-yellow-400]="star <= review.rating"
+                    [class.text-gray-300]="star > review.rating">
+                    ★
+                  </span>
+                }
+
+                <span class="text-sm font-semibold text-gray-700 ml-2">
+                  {{ review.rating }}/5
+                </span>
+
+              </div>
+
+              <p class="text-gray-700 leading-relaxed mb-4">
+                {{ review.comment }}
+              </p>
+
+              <div class="flex flex-wrap items-center gap-4 text-xs text-gray-500">
+
+                <span class="flex items-center gap-1">
+                  <span>📦</span>
+                  {{ review.product.name }}
+                </span>
+
+                <span class="flex items-center gap-1">
+                  <span class="material-icons text-gray-500 text-base">calendar_month</span>
+                  {{ review.createdAt }}
+                </span>
+
+              </div>
+
+            </div>
+
+            <div class="flex items-center gap-2">
+
+              <button
+                class="px-4 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition">
+                Delete
+              </button>
+
+              <button
+                class="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition">
+                Update
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      } @empty {
+
+        <div class="bg-white border border-gray-200 rounded-xl p-12 text-center">
+
+          <div class="text-5xl mb-4">⭐</div>
+
+          <h3 class="text-lg font-semibold text-gray-800">
+            No reviews found
+          </h3>
+
+          <p class="text-sm text-gray-500 mt-2">
+            There are no customer reviews available.
+          </p>
+
+        </div>
+
+      }
+
+    </div>
+
+  </div>
+
+</div>
