@@ -4,6 +4,7 @@ import {ImageService} from '../../../services/image-service/image-service';
 import {ProductService} from '../../../services/product-service/product-service';
 import {Product} from '../../../entities/Product';
 import {CurrencyPipe} from '@angular/common';
+import {CartItemService} from '../../../services/cartItem-service/cart-item-service';
 
 @Component({
   imports: [
@@ -16,6 +17,7 @@ import {CurrencyPipe} from '@angular/common';
 export class ProductDetails {
   private imageService = inject(ImageService);
   private productService = inject(ProductService);
+  private cartItemService = inject(CartItemService);
   product = signal<Product | null >(null);
   private route = inject(Router);
 
@@ -63,6 +65,19 @@ export class ProductDetails {
         }
       })
     }
+  }
+
+
+  addProductToCart(cartId: number, productId: number, quantity: number) {
+    this.cartItemService.addProductToCart(cartId, productId, quantity).subscribe({
+      next: (response) => {
+        alert(response.message);
+      },
+      error: (error) => {
+        console.error(error);
+        alert(error.error?.message || 'Failed to add product to cart');
+      }
+    });
   }
 
 }
