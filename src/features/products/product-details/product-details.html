@@ -46,13 +46,6 @@
             <h1 class="text-2xl font-bold leading-tight text-gray-900 sm:text-3xl">
               {{ p.name }}
             </h1>
-            <p class="mt-2 text-sm text-gray-500">
-              Product code #{{ p.id }}
-              @if (p.brand) {
-                <span class="mx-2">|</span>
-                {{ p.brand }}
-              }
-            </p>
           </div>
           <span class="rounded-md bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700">
             {{ p.brand || 'Product' }}
@@ -127,8 +120,9 @@
 
           <button
             type="button"
+            (click)="addProductToCart(p.id , 1 , quantity())"
             [disabled]="!p.active || p.quantity === 0"
-            class="flex h-14 flex-1 items-center justify-center gap-3 rounded-lg bg-amber-400 px-5 font-semibold text-gray-900 transition hover:bg-amber-500 disabled:cursor-not-allowed disabled:bg-gray-300"
+            class="flex h-14 flex-1 items-center justify-center gap-3 rounded-lg bg-amber-400 px-5 font-semibold text-gray-900 transition hover:bg-amber-500 disabled:cursor-not-allowed"
           >
             <span class="material-icons">add_box</span>
             Add to cart

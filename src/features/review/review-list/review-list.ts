@@ -1,7 +1,7 @@
 import {Component, inject, signal} from '@angular/core';
 import {Review} from '../../../entities/Review';
 import {ReviewService} from '../../../services/review-service/review-service';
-import {ApiResponse} from '../../../response/ApiResponse';
+import {ApiResponse} from '../../../entities/ApiResponse';
 import {DatePipe} from '@angular/common';
 
 @Component({

@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environment/environment';
 import { Order } from '../../entities/Order';
-import { ApiResponse } from '../../response/ApiResponse';
+import { ApiResponse } from '../../entities/ApiResponse';
 import {OrderStatus} from '../../enums/OrderStatus.enum';
 
 @Injectable({

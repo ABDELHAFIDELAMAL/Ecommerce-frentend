@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {environment} from '../../environment/environment';
-import {ApiResponse} from '../../response/ApiResponse';
+import {ApiResponse} from '../../entities/ApiResponse';
 import {User} from '../../entities/User';
 
 

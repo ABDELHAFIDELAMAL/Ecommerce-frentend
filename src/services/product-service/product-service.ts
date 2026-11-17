@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environment/environment';
 import { Product } from '../../entities/Product';
-import { ApiResponse } from '../../response/ApiResponse';
+import { ApiResponse } from '../../entities/ApiResponse';
 import { Review } from '../../entities/Review';
 
 @Injectable({
@@ -29,7 +29,7 @@ export class ProductService {
     return this.http.put<ApiResponse<Product>>(`${this.apiUrl}/update/${id}`, product);
   }
 
-  searchProduct(text: string): Observable<ApiResponse<Product[]>> {
+  searchProducts(text: string): Observable<ApiResponse<Product[]>> {
     const params = new HttpParams().set('text', text);
     return this.http.get<ApiResponse<Product[]>>(`${this.apiUrl}/search`, { params });
   }

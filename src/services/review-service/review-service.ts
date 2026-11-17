@@ -3,7 +3,7 @@ import {environment} from '../../environment/environment';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Review} from '../../entities/Review';
-import {ApiResponse} from '../../response/ApiResponse';
+import {ApiResponse} from '../../entities/ApiResponse';
 
 @Service()
 export class ReviewService {

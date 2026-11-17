@@ -2,7 +2,7 @@ import {inject, Service} from '@angular/core';
 import {environment} from '../../environment/environment';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {ApiResponse} from '../../response/ApiResponse';
+import {ApiResponse} from '../../entities/ApiResponse';
 import {Promotion} from '../../entities/Promotion';
 import {DiscountType} from '../../enums/DiscountType.enum';
 

@@ -3,6 +3,8 @@ import { Product } from '../../../entities/Product';
 import { ProductService } from '../../../services/product-service/product-service';
 import { ImageService } from '../../../services/image-service/image-service';
 import {Image} from '../../../entities/Image';
+import {Category} from '../../../entities/Category';
+import {CategoryService} from '../../../services/category-service/category-service';
 
 @Component({
   imports: [],
@@ -12,12 +14,10 @@ import {Image} from '../../../entities/Image';
 })
 export class ProductList {
   productService = inject(ProductService);
-  imageService = inject(ImageService);
+  categoryService = inject(CategoryService);
   products = signal<Product[]>([]);
-
+  categories = signal<Category[]>([]);
   selectedImages = signal<{ [productId: number]: string }>({});
-
-
   loading = signal(true);
   skeletons = Array.from({ length: 8 });
 
@@ -29,6 +29,12 @@ export class ProductList {
       },
       error: () => this.loading.set(false),
     });
+    this.categoryService.getAllCategories().subscribe({
+      next: (response) => {
+        this.categories.set(response.data);
+      },
+      error: (response) => console.log(response)
+    })
   }
 
 
@@ -37,5 +43,76 @@ export class ProductList {
       ...images,
       [productId]: imageUrl
     }));
+  }
+
+  deleteProductById(id: number): void {
+    if(confirm('Are you sure you want to delete this product?')) {
+      this.productService.deleteProduct(id).subscribe({
+        next: (response) => {
+          alert(response.message);
+        },
+        error: (response) => {
+          alert(response.message);
+        }
+      })
+    }
+  }
+
+  getProductsByCategory(categoryId : number){
+    this.productService.getProductsByCategory(categoryId).subscribe({
+      next: (response) => {
+        this.products.set(response.data);
+      },
+      error: (response) => console.log(response)
+    })
+  }
+
+  searchProducts(text : string) {
+    this.productService.searchProducts(text).subscribe({
+      next: (response) => {
+        this.products.set(response.data);
+      },
+      error: (response) => {
+        console.log(response.message);
+      }
+    })
+  }
+
+  getAvailableProducts(){
+    this.productService.getAvailableProducts().subscribe({
+      next: (response) => {
+        this.products.set(response.data);
+      },
+      error: (response) => {
+        alert(response.message);
+      }
+    })
+  }
+
+  getTopRatedProducts(){
+    this.productService.getTopRatedProducts().subscribe({
+      next: (response) => {
+        this.products.set(response.data);
+      },
+      error: (response) => {
+        alert(response.message);
+      }
+    })
+  }
+
+  applyPromotionToProduct(productId: number, promotionId: number){
+    this.productService.applyPromotionToProduct(productId, promotionId).subscribe({
+      next: (response) => {},
+      error: (response) => {
+        alert(response.message);
+      },
+    })
+  }
+
+  calculateDiscountedPrice(productId: number, promotionId: number){
+    this.productService.calculateDiscountedPrice(productId, promotionId).subscribe({
+      next: (response) => {},
+      error: (response) => {},
+    })
   }
 }

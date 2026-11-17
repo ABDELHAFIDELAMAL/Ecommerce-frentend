@@ -1,5 +1,5 @@
 import {Component, inject, signal} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ImageService} from '../../../services/image-service/image-service';
 import {ProductService} from '../../../services/product-service/product-service';
 import {Product} from '../../../entities/Product';
@@ -19,8 +19,7 @@ export class ProductDetails {
   private productService = inject(ProductService);
   private cartItemService = inject(CartItemService);
   product = signal<Product | null >(null);
-  private route = inject(Router);
-
+  private route = inject(ActivatedRoute)
   selectedImage = signal<string | null>(null);
   quantity = signal<number>(1);
 
@@ -37,8 +36,10 @@ export class ProductDetails {
   }
 
 
+
   ngOnInit() {
-    this.getProductById(26);
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.getProductById(id);
   }
 
 

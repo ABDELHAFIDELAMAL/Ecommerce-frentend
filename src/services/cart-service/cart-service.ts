@@ -2,7 +2,7 @@ import {inject, Service} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environment/environment';
 import {Observable} from 'rxjs';
-import {ApiResponse} from '../../response/ApiResponse';
+import {ApiResponse} from '../../entities/ApiResponse';
 import {Cart} from '../../entities/Cart';
 
 @Service()

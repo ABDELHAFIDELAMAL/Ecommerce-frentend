@@ -17,23 +17,8 @@
         <a routerLink="/contact" class="whitespace-nowrap text-sm font-semibold text-gray-500 transition hover:text-gray-900">Contact</a>
       </div>
 
-      <select class="hidden w-36 min-w-0 shrink-0 rounded-lg border border-gray-300 bg-white px-2 py-2 text-sm font-semibold text-gray-700 outline-none focus:border-gray-500 md:block xl:w-40">
-        <option value="">All Categories</option>
-        <option value="electronics">Electronics</option>
-        <option value="phones">Phones</option>
-        <option value="computers">Computers</option>
-        <option value="laptops">Laptops</option>
-        <option value="tablets">Tablets</option>
-      </select>
 
       <div class="hidden shrink-0 items-center gap-3 md:flex">
-        <div class="flex h-9 w-40 rounded items-center border border-gray-200 bg-gray-50 xl:w-48">
-          <input type="text" placeholder="Search" class="min-w-0 flex-1 bg-transparent px-3 text-xs text-gray-700 outline-none placeholder:text-gray-400"/>
-          <button type="button" class="mr-1 flex h-7 w-7 shrink-0 items-center justify-center text-gray-500 hover:text-gray-900">
-            <span class="material-icons text-lg">search</span>
-          </button>
-        </div>
-
         <a routerLink="/my/cart" class="flex shrink-0 items-center gap-1 font-semibold text-gray-700 hover:text-gray-900">
           <span class="material-icons text-xl">shopping_cart</span>
           <span class="hidden lg:inline">Cart</span>
@@ -60,21 +45,6 @@
 
     @if (isMenuOpen) {
       <div class="max-h-[calc(100vh-4rem)] w-full overflow-y-auto overflow-x-hidden border-t border-gray-100 py-3 lg:hidden">
-
-        <div class="mb-3 flex h-10 w-full overflow-hidden rounded-md border border-gray-200 bg-gray-50 md:hidden">
-          <input type="text" placeholder="Search..." class="min-w-0 flex-1 bg-transparent px-3 text-sm outline-none"/>
-          <button type="button" class="flex w-11 shrink-0 items-center justify-center text-gray-500 hover:bg-gray-900 hover:text-white">
-            <span class="material-icons text-lg">search</span>
-          </button>
-        </div>
-
-        <select class="mb-3 w-full min-w-0 max-w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-sm font-semibold text-gray-700 outline-none focus:border-gray-500 md:hidden">
-          <option value="">All Categories</option>
-          @for(category of categories(); track category.id){
-            <option>{{ category.name }}</option>
-          }
-        </select>
-
         <div class="grid grid-cols-2 gap-1">
           <a routerLink="/home" (click)="closeMenu()" class="rounded-md px-3 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50">Home</a>
           <a routerLink="/store" (click)="closeMenu()" class="rounded-md px-3 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50">Store</a>

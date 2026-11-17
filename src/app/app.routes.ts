@@ -17,5 +17,5 @@ export const routes: Routes = [
   { path: 'upload/image' , component : UploadImageForm} ,
   { path: 'create/promotion' , component : CreatePromotion} ,
   { path: 'reviews' , component : ReviewList} ,
-  { path: 'productDetails' , component : ProductDetails} ,
+  { path: 'products/details/:id', component: ProductDetails },
 ];

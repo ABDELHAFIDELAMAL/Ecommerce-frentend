@@ -2,7 +2,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Image } from '../../entities/Image';
-import { ApiResponse } from '../../response/ApiResponse';
+import { ApiResponse } from '../../entities/ApiResponse';
 import {environment} from '../../environment/environment';
 
 @Service()

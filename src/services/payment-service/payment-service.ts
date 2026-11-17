@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {ApiResponse} from '../../response/ApiResponse';
+import {ApiResponse} from '../../entities/ApiResponse';
 import {Promotion} from '../../entities/Promotion';
 import {environment} from '../../environment/environment';
 
