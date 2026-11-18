@@ -5,9 +5,12 @@ import { ImageService } from '../../../services/image-service/image-service';
 import {Image} from '../../../entities/Image';
 import {Category} from '../../../entities/Category';
 import {CategoryService} from '../../../services/category-service/category-service';
+import {RouterLink} from '@angular/router';
 
 @Component({
-  imports: [],
+  imports: [
+    RouterLink
+  ],
   selector: 'app-product-list',
   styleUrl: './product-list.css',
   templateUrl: './product-list.html',
@@ -15,6 +18,7 @@ import {CategoryService} from '../../../services/category-service/category-servi
 export class ProductList {
   productService = inject(ProductService);
   categoryService = inject(CategoryService);
+  imageService = inject(ImageService);
   products = signal<Product[]>([]);
   categories = signal<Category[]>([]);
   selectedImages = signal<{ [productId: number]: string }>({});
@@ -22,6 +26,16 @@ export class ProductList {
   skeletons = Array.from({ length: 8 });
 
   ngOnInit() {
+    this.getAllProducts();
+    this.categoryService.getAllCategories().subscribe({
+      next: (response) => {
+        this.categories.set(response.data);
+      },
+      error: (response) => console.log(response)
+    })
+  }
+
+  protected getAllProducts() {
     this.productService.getAllProducts().subscribe({
       next: (response) => {
         this.products.set(response.data);
@@ -29,12 +43,6 @@ export class ProductList {
       },
       error: () => this.loading.set(false),
     });
-    this.categoryService.getAllCategories().subscribe({
-      next: (response) => {
-        this.categories.set(response.data);
-      },
-      error: (response) => console.log(response)
-    })
   }
 
 
@@ -115,4 +123,26 @@ export class ProductList {
       error: (response) => {},
     })
   }
+
+
+  deleteImageById(id: number){
+    if(confirm('Are you sure you want to delete this image?')){
+      this.imageService.deleteImage(id).subscribe({
+        next: (response) => {
+          alert(response.message);
+        },
+        error: (response) => {
+          console.log(response.message);
+        },
+      })
+    }
+  }
+
+  getSelectedImage(product: Product) {
+    const selectedUrl = this.selectedImages()[product.id];
+    return product.images.find(
+      image => image.imageUrl === selectedUrl
+    ) ?? product.images[0];
+  }
+
 }

@@ -1,11 +1,12 @@
-import {Component, inject} from '@angular/core';
-import {ImageService} from '../../../services/image-service/image-service';
-import {Router} from '@angular/router';
-import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {validate} from '@angular/forms/signals';
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ImageService } from '../../../services/image-service/image-service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   imports: [
+    CommonModule,
     ReactiveFormsModule
   ],
   selector: 'app-upload-image-form',
@@ -13,8 +14,12 @@ import {validate} from '@angular/forms/signals';
   templateUrl: './upload-image-form.html',
 })
 export class UploadImageForm {
+
   private imageService = inject(ImageService);
-  private route = inject(Router);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
+  productId = Number(this.route.snapshot.paramMap.get('id'));
 
   uploadImageForm = new FormGroup({
     altText: new FormControl('', Validators.required),
@@ -22,35 +27,45 @@ export class UploadImageForm {
   });
 
   previewUrl: string | null = null;
-  productId = 5;
-  onFileSelected(event: any) {
-    const file = event.target.files[0] as File;
+  selectedFileName = '';
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
     if (!file) return;
 
-    this.uploadImageForm.patchValue({ file: file });
+    this.uploadImageForm.patchValue({ file });
     this.uploadImageForm.get('file')?.updateValueAndValidity();
+    this.selectedFileName = file.name;
 
     const reader = new FileReader();
-    reader.onload = () => this.previewUrl = reader.result as string;
+    reader.onload = () => {
+      this.previewUrl = reader.result as string;
+    };
     reader.readAsDataURL(file);
   }
 
-  submit() {
-    if (this.uploadImageForm.invalid) return;
+  submit(): void {
+    if (this.uploadImageForm.invalid || !this.productId) {
+      this.uploadImageForm.markAllAsTouched();
+      return;
+    }
 
-    const file = this.uploadImageForm.value.file!;
-    const altText = this.uploadImageForm.value.altText!;
+    const file = this.uploadImageForm.getRawValue().file!;
+    const altText = this.uploadImageForm.getRawValue().altText!;
 
-    this.imageService.uploadImage(26, file, altText).subscribe({
-      next: (res) => {
-        console.log('success', res);
-        alert(res.message);
-        this.route.navigate(['/store']).then();
+    this.imageService.uploadImage(this.productId, file, altText).subscribe({
+      next: response => {
+        alert(response.message);
+        this.router.navigate(['/store']);
         this.uploadImageForm.reset();
         this.previewUrl = null;
       },
-      error: (err) => console.error(err)
+      error: error => {
+        console.error('Error uploading image:', error);
+        alert(error.error?.message || 'Failed to upload image');
+      }
     });
   }
-
 }

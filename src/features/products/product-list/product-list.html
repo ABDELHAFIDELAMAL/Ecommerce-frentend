@@ -1,155 +1,217 @@
-<div class="min-h-screen bg-gray-50 px-3 py-5 sm:px-5">
-  <header class="w-full flex flex-col lg:flex-row lg:items-center gap-3 p-4 bg-white rounded-2xl shadow-sm border border-gray-100">
-    <div class="relative flex-1 min-w-0">
-      <span class="material-icons absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">search</span>
-      <input
-        type="search"
-        placeholder="Search products..."
-        (input)="searchProducts($any($event.target).value)"
-        class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-700 placeholder-gray-400 outline-none transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-      />
-    </div>
-    <select
-      (change)="getProductsByCategory(+$any($event.target).value)"
-      class="w-full lg:w-56 px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-700 outline-none transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 cursor-pointer"
-    >
-      <option value="" disabled selected>Filter by category</option>
-      @for (category of categories(); track category.id) {
-        <option [value]="category.id">{{ category.name }}</option>
-      }
-    </select>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:flex gap-3">
-      <button
-        (click)="getAvailableProducts()"
-        class="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-green-600 hover:bg-green-700 active:scale-95 text-white font-semibold transition-all duration-300 shadow-sm whitespace-nowrap"
-      >
-        <span class="material-icons text-xl">check_circle</span>
-        Available Products
-      </button>
-      <button
-        (click)="getTopRatedProducts()"
-        class="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 active:scale-95 text-white font-semibold transition-all duration-300 shadow-sm whitespace-nowrap"
-      >
-        <span class="material-icons text-xl">star</span>
-        Top Rated Products
-      </button>
-    </div>
-  </header>
-
-
-
-
-  <div class="mx-auto max-w-6xl">
-    <div class="mb-5">
-      <h1 class="text-2xl font-bold text-gray-900">Products</h1>
-      <p class="text-xs text-gray-500">Discover our latest products</p>
-    </div>
-
-    @if (loading()) {
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        @for (item of skeletons; track $index) {
-          <div class="animate-pulse overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100">
-            <div class="p-2">
-              <div class="aspect-square rounded-lg bg-gray-200"></div>
-              <div class="mt-1 flex gap-1">
-                <div class="h-10 w-10 rounded-md bg-gray-200"></div>
-                <div class="h-10 w-10 rounded-md bg-gray-200"></div>
-                <div class="h-10 w-10 rounded-md bg-gray-200"></div>
-              </div>
-            </div>
-
-            <div class="px-3 pb-3">
-              <div class="h-2.5 w-12 rounded bg-gray-200"></div>
-              <div class="mt-2 h-4 w-3/4 rounded bg-gray-200"></div>
-              <div class="mt-2 h-3 w-full rounded bg-gray-200"></div>
-              <div class="mt-2 h-3 w-16 rounded bg-gray-200"></div>
-
-              <div class="mt-3 flex items-center justify-between">
-                <div>
-                  <div class="h-5 w-16 rounded bg-gray-200"></div>
-                  <div class="mt-1 h-2.5 w-20 rounded bg-gray-200"></div>
-                </div>
-                <div class="h-8 w-24 rounded-lg bg-gray-200"></div>
-              </div>
-            </div>
-          </div>
-        }
+<div class="w-full min-h-screen bg-gray-50 px-3 py-5 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-7xl overflow-hidden rounded-2xl border border-gray-200 bg-white">
+    <header class="flex flex-col gap-3 border-b border-gray-200 p-3 sm:p-4 lg:flex-row lg:items-center lg:justify-between">
+      <div class="inline-flex w-full overflow-hidden rounded-xl border border-gray-200 bg-gray-50 p-1 sm:w-auto">
+        <button
+          (click)="getAvailableProducts()"
+          title="Available products"
+          class="flex flex-1 items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium text-gray-600 transition hover:bg-white hover:text-gray-900 hover:shadow-sm active:scale-95 sm:flex-none"
+        >
+          <span class="material-icons text-lg">check_circle</span>
+          <span class="hidden sm:inline">Available</span>
+        </button>
+        <button
+          (click)="getTopRatedProducts()"
+          title="Top rated products"
+          class="flex flex-1 items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium text-gray-600 transition hover:bg-white hover:text-gray-900 hover:shadow-sm active:scale-95 sm:flex-none"
+        >
+          <span class="material-icons text-lg">star</span>
+          <span class="hidden sm:inline">Top rated</span>
+        </button>
+        <button
+          type="button"
+          (click)="getAllProducts()"
+          title="Refresh products"
+          class="flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-600 shadow transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-600 active:scale-95"
+        >
+          <span class="material-icons">refresh</span>
+        </button>
       </div>
-    } @else if (products().length > 0) {
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        @for (product of products(); track product.id) {
-          <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100">
-            <div class="p-2">
+
+      <div class="flex w-full flex-col gap-3 sm:flex-row sm:items-center lg:w-auto">
+        <div class="relative min-w-0 flex-1 sm:w-64 sm:flex-none">
+          <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-lg text-gray-400">search</span>
+          <input
+            type="search"
+            placeholder="Search product"
+            (input)="searchProducts($any($event.target).value)"
+            class="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-10 pr-3 text-sm text-gray-700 placeholder-gray-400 outline-none transition focus:border-gray-400 focus:ring-4 focus:ring-gray-100"
+          />
+        </div>
+
+        <select
+          (change)="getProductsByCategory(+$any($event.target).value)"
+          class="w-full cursor-pointer rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-600 outline-none transition focus:border-gray-400 focus:ring-4 focus:ring-gray-100 sm:w-44"
+        >
+          <option value="" disabled selected>Filter</option>
+          @for (category of categories(); track category.id) {
+            <option [value]="category.id">{{ category.name }}</option>
+          }
+        </select>
+
+        <button
+          type="button"
+          routerLink="/create/product"
+          class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-xl bg-gray-800 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-gray-900 active:scale-95"
+        >
+          <span class="material-icons text-lg">add</span>
+          Create Product
+        </button>
+      </div>
+    </header>
+
+    <div class="p-3 sm:p-4 lg:p-5">
+      <div class="mb-4">
+        <h1 class="text-xl font-bold text-gray-900 sm:text-2xl">Products</h1>
+        <p class="text-xs text-gray-500">Discover our latest products</p>
+      </div>
+
+      @if (loading()) {
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          @for (item of skeletons; track $index) {
+            <div class="animate-pulse overflow-hidden rounded-2xl border border-gray-200 bg-white p-3">
+              <div class="h-1.5 w-10 rounded bg-gray-200"></div>
+              <div class="mt-3 aspect-square rounded-xl bg-gray-200"></div>
+              <div class="mt-2 flex gap-1">
+                <div class="h-10 w-10 rounded-md bg-gray-200"></div>
+                <div class="h-10 w-10 rounded-md bg-gray-200"></div>
+                <div class="h-10 w-10 rounded-md bg-gray-200"></div>
+              </div>
+              <div class="mt-3 border-t border-gray-100 pt-3">
+                <div class="h-2.5 w-12 rounded bg-gray-200"></div>
+                <div class="mt-2 h-4 w-3/4 rounded bg-gray-200"></div>
+                <div class="mt-2 h-3 w-full rounded bg-gray-200"></div>
+                <div class="mt-3 flex items-center justify-between">
+                  <div class="h-5 w-16 rounded bg-gray-200"></div>
+                  <div class="h-4 w-10 rounded bg-gray-200"></div>
+                </div>
+                <div class="mt-3 h-9 w-full rounded-lg bg-gray-200"></div>
+              </div>
+            </div>
+          }
+        </div>
+      } @else if (products().length > 0) {
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          @for (product of products(); track product.id) {
+            <div class="flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white p-3 transition hover:shadow-md">
+              <div class="mb-2 flex items-center gap-1">
+                <span class="h-1 w-4 rounded-full bg-red-500"></span>
+                <span class="h-1 w-1 rounded-full bg-gray-300"></span>
+                <span class="h-1 w-1 rounded-full bg-gray-300"></span>
+              </div>
+
               @if (product.images && product.images.length > 0) {
-                <div class="aspect-square overflow-hidden rounded-lg bg-gray-100">
+                <div class="group relative aspect-square overflow-hidden rounded-xl bg-white">
                   <img
                     [src]="'http://localhost:8090' + (selectedImages()[product.id] || product.images[0].imageUrl)"
                     [alt]="product.name"
-                    class="h-full w-full object-cover"
+                    class="h-full w-full object-contain p-3 transition duration-500 group-hover:scale-105"
                   />
+
+                  @if (getSelectedImage(product); as selectedImage) {
+                    <button
+                      type="button"
+                      (click)="deleteImageById(selectedImage.id)"
+                      title="Delete selected image"
+                      class="absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-red-600 text-white opacity-100 shadow-lg transition duration-300 hover:scale-110 hover:bg-red-700 lg:opacity-0 lg:group-hover:opacity-100"
+                    >
+                      <span class="material-icons text-base">delete</span>
+                    </button>
+                  }
                 </div>
 
-                <div class="mt-1 flex gap-1 overflow-x-auto">
+                <div class="mt-2 flex gap-1.5 overflow-x-auto pb-1">
                   @for (image of product.images; track image.id) {
                     <button
                       type="button"
                       (click)="selectImage(product.id, image.imageUrl)"
                       class="h-10 w-10 shrink-0 overflow-hidden rounded-md border bg-white"
-                      [class.border-black]="(selectedImages()[product.id] || product.images[0].imageUrl) === image.imageUrl"
+                      [class.border-gray-800]="(selectedImages()[product.id] || product.images[0].imageUrl) === image.imageUrl"
                       [class.border-gray-200]="(selectedImages()[product.id] || product.images[0].imageUrl) !== image.imageUrl"
                     >
                       <img
                         [src]="'http://localhost:8090' + image.imageUrl"
                         [alt]="image.altText || product.name"
-                        class="h-full w-full object-cover"
+                        class="h-full w-full object-contain"
                       />
                     </button>
                   }
                 </div>
               } @else {
-                <div class="flex aspect-square items-center justify-center rounded-lg bg-gray-100 text-xs text-gray-400">
+                <div class="flex aspect-square items-center justify-center rounded-xl bg-gray-50 text-xs text-gray-400">
                   No image
                 </div>
               }
-            </div>
 
-            <div class="px-3 pb-3">
-              <p class="text-[10px] uppercase text-gray-400">{{ product.brand }}</p>
-              <h2 class="mt-0.5 line-clamp-1 text-sm font-bold text-gray-900">{{ product.name }}</h2>
-              <p class="mt-1 line-clamp-1 text-[11px] text-gray-500">{{ product.description }}</p>
+              <div class="mt-3 flex flex-1 flex-col border-t border-gray-100 pt-3">
+                <p class="text-[10px] uppercase tracking-wide text-gray-400">{{ product.brand }}</p>
+                <h2 class="mt-0.5 line-clamp-1 text-sm font-semibold text-gray-900">{{ product.name }}</h2>
+                <p class="mt-1 line-clamp-1 text-[11px] text-gray-500">{{ product.description }}</p>
 
-              <div class="mt-1 flex items-center gap-1">
-                <span class="text-xs text-yellow-400">★</span>
-                <span class="text-xs font-semibold text-black">{{ product.averageRating }}</span>
-                <span class="text-[10px] text-gray-400">({{ product.reviewCount }})</span>
-              </div>
-
-              <div class="mt-2 flex items-center justify-between">
-                <div>
-                  <p class="text-lg font-bold text-gray-900">{{ product.price }} €</p>
-                  <p class="text-[10px] text-gray-400">{{ product.quantity }} available</p>
+                <div class="mt-2 flex items-center justify-between">
+                  <p class="text-sm text-gray-700">{{ product.price }} €</p>
+                  <div class="flex items-center gap-1">
+                    <span class="text-sm text-lime-700">★</span>
+                    <span class="text-sm font-medium text-lime-700">{{ product.averageRating }}</span>
+                    <span class="text-[10px] text-gray-400">({{ product.reviewCount }})</span>
+                  </div>
                 </div>
+                <p class="mt-0.5 text-[10px] text-gray-400">{{ product.quantity }} available</p>
 
-                <button
-                  type="button"
-                  [disabled]="!product.active || product.quantity <= 0"
-                  class="rounded-lg bg-black px-3 py-2 text-xs font-semibold text-white hover:bg-gray-800 disabled:bg-gray-300"
-                >
-                  Add to cart
-                </button>
+                <div class="mt-3 flex flex-wrap items-center gap-1.5">
+                  <button
+                    type="button"
+                    [routerLink]="['/upload/image', product.id]"
+                    title="Add image"
+                    class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 transition hover:bg-gray-800 hover:text-white"
+                  >
+                    <span class="material-icons text-lg">add_photo_alternate</span>
+                  </button>
+                  <button
+                    type="button"
+                    [routerLink]="['/products/details', product.id]"
+                    title="View Product Details"
+                    class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 transition hover:bg-gray-800 hover:text-white"
+                  >
+                    <span class="material-icons text-lg">visibility</span>
+                  </button>
+                  <button
+                    type="button"
+                    [routerLink]="['/products/update', product.id]"
+                    title="Update Product"
+                    class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 transition hover:bg-gray-800 hover:text-white"
+                  >
+                    <span class="material-icons text-lg">edit</span>
+                  </button>
+                  <button
+                    type="button"
+                    title="Delete Product"
+                    (click)="deleteProductById(product.id)"
+                    class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-red-500 transition hover:bg-red-600 hover:text-white"
+                  >
+                    <span class="material-icons text-lg">delete</span>
+                  </button>
+                  <button
+                    type="button"
+                    [disabled]="!product.active || product.quantity <= 0"
+                    class="ml-auto rounded-lg bg-gray-800 px-3 py-2 text-xs font-medium text-white transition hover:bg-gray-900 disabled:cursor-not-allowed disabled:bg-gray-300"
+                  >
+                    Add to cart
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        }
-      </div>
-    } @else {
-      <div class="flex min-h-75 items-center justify-center rounded-xl bg-white">
-        <div class="text-center">
-          <div class="mb-2 text-4xl">🛍️</div>
-          <h2 class="text-lg font-bold text-gray-900">No products found</h2>
-          <p class="mt-1 text-xs text-gray-500">There are currently no products available.</p>
+          }
         </div>
-      </div>
-    }
+      } @else {
+        <div class="flex min-h-75 items-center justify-center rounded-2xl border border-dashed border-gray-200 bg-white">
+          <div class="text-center">
+            <div class="mb-2 text-4xl">🛍️</div>
+            <h2 class="text-lg font-bold text-gray-900">No products found</h2>
+            <p class="mt-1 text-xs text-gray-500">There are currently no products available.</p>
+          </div>
+        </div>
+      }
+    </div>
   </div>
 </div>

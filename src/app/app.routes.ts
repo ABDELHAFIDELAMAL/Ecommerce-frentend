@@ -10,12 +10,16 @@ import {ReviewList} from '../features/review/review-list/review-list';
 import {ProductDetails} from '../features/products/product-details/product-details';
 
 export const routes: Routes = [
-  { path: 'store', component: ProductList} ,
+  { path: 'store', component: Store} ,
   { path: 'about' , component : About },
+
   { path: 'create/product' , component : CreateProduct},
+
   { path: 'my/cart' , component : CartComponent},
-  { path: 'upload/image' , component : UploadImageForm} ,
+  { path: 'upload/image/:id' , component : UploadImageForm} ,
   { path: 'create/promotion' , component : CreatePromotion} ,
   { path: 'reviews' , component : ReviewList} ,
+
+  { path: 'products/update/:id', component: CreateProduct },
   { path: 'products/details/:id', component: ProductDetails },
 ];
