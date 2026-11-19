@@ -71,4 +71,8 @@ export class ProductService {
     return this.http.get<ApiResponse<number>>(`${this.apiUrl}/${productId}/promotions/${promotionId}/discounted-price`);
   }
 
+  deleteAllProducts() : Observable<ApiResponse<void>>{
+    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/delete/all3`);
+  }
+
 }

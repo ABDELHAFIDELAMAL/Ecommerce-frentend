@@ -1,5 +1,5 @@
 <div class="w-full min-h-screen bg-gray-50 px-3 py-5 sm:px-6 lg:px-8">
-  <div class="mx-auto max-w-7xl overflow-hidden rounded-2xl border border-gray-200 bg-white">
+  <div class="mx-auto overflow-hidden rounded-2xl border border-gray-200 bg-white">
     <header class="flex flex-col gap-3 border-b border-gray-200 p-3 sm:p-4 lg:flex-row lg:items-center lg:justify-between">
       <div class="inline-flex w-full overflow-hidden rounded-xl border border-gray-200 bg-gray-50 p-1 sm:w-auto">
         <button
@@ -56,6 +56,14 @@
         >
           <span class="material-icons text-lg">add</span>
           Create Product
+        </button>
+        <button
+          type="button"
+          (click)="deleteAllProducts()"
+          class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-xl bg-red-800 px-4 py-2.5 text-sm font-medium text-red transition hover:bg-red-900 active:scale-95"
+        >
+          <span class="material-icons text-lg">delete</span>
+          Delete All Products
         </button>
       </div>
     </header>
@@ -149,7 +157,7 @@
                 <p class="mt-1 line-clamp-1 text-[11px] text-gray-500">{{ product.description }}</p>
 
                 <div class="mt-2 flex items-center justify-between">
-                  <p class="text-sm text-gray-700">{{ product.price }} €</p>
+                  <p class="text-sm font-bold text-orange-500">{{ product.price }} MAD</p>
                   <div class="flex items-center gap-1">
                     <span class="text-sm text-lime-700">★</span>
                     <span class="text-sm font-medium text-lime-700">{{ product.averageRating }}</span>
@@ -194,7 +202,8 @@
                   <button
                     type="button"
                     [disabled]="!product.active || product.quantity <= 0"
-                    class="ml-auto rounded-lg bg-gray-800 px-3 py-2 text-xs font-medium text-white transition hover:bg-gray-900 disabled:cursor-not-allowed disabled:bg-gray-300"
+                    (click)="addProductToCart(product.id, 1)"
+                    class="ml-auto rounded-lg cursor-pointer hover:scale-105 bg-gray-800 px-3 py-2 text-xs font-medium text-white transition hover:bg-gray-900 disabled:cursor-not-allowed disabled:bg-gray-300"
                   >
                     Add to cart
                   </button>

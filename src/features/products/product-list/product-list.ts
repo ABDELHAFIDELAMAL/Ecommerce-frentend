@@ -6,6 +6,9 @@ import {Image} from '../../../entities/Image';
 import {Category} from '../../../entities/Category';
 import {CategoryService} from '../../../services/category-service/category-service';
 import {RouterLink} from '@angular/router';
+import {Observable} from 'rxjs';
+import {CartItemService} from '../../../services/cartItem-service/cart-item-service';
+import {CartService} from '../../../services/cart-service/cart-service';
 
 @Component({
   imports: [
@@ -19,6 +22,9 @@ export class ProductList {
   productService = inject(ProductService);
   categoryService = inject(CategoryService);
   imageService = inject(ImageService);
+  cartItemService = inject(CartItemService);
+  cartService = inject(CartService);
+
   products = signal<Product[]>([]);
   categories = signal<Category[]>([]);
   selectedImages = signal<{ [productId: number]: string }>({});
@@ -138,11 +144,53 @@ export class ProductList {
     }
   }
 
+  deleteAllProducts() : void {
+    if(confirm('Are you sure you want to delete All products?')){
+      this.productService.deleteAllProducts().subscribe({
+        next: (response) => {
+          alert(response.message);
+          this.getAllProducts();
+        },
+        error: (response) => {
+          console.log(response.message);
+        }
+      })
+    }
+  }
+
   getSelectedImage(product: Product) {
     const selectedUrl = this.selectedImages()[product.id];
     return product.images.find(
       image => image.imageUrl === selectedUrl
     ) ?? product.images[0];
+  }
+
+  cartId: number | null = 1;
+
+  getCartByUserId(userId: number) {
+    this.cartService.getCartByUserById(userId).subscribe({
+      next: (response) => {
+        this.cartId = response.data.id;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
+
+  addProductToCart(productId: number, quantity: number) {
+    if (this.cartId === null) {
+      console.error('Cart not found');
+      return;
+    }
+    this.cartItemService.addProductToCart(this.cartId, productId, quantity).subscribe({
+      next: (response) => {
+        alert(response.message);
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
   }
 
 }
