@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
+import {ViewportScroller} from '@angular/common';
 
 @Component({
   imports: [],
@@ -6,4 +7,14 @@ import { Component } from '@angular/core';
   styleUrl: './home.css',
   templateUrl: './home.html',
 })
-export class Home {}
+export class Home {
+  private viewportScroller = inject(ViewportScroller);
+
+  exploreProducts(): void {
+    this.viewportScroller.scrollToAnchor('products');
+  }
+
+  discoverMore(): void {
+    this.viewportScroller.scrollToAnchor('about');
+  }
+}

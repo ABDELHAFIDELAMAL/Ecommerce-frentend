@@ -18,4 +18,12 @@ export class CartService {
   getCartByUserById(id : number) : Observable<ApiResponse<Cart>>{
     return this.http.get<ApiResponse<Cart>>(`${this.apiUrl}/user/${id}`);
   }
+
+  clearCart(cartId : number) : Observable<ApiResponse<void>>{
+    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${cartId}/clear`);
+  }
+
+  getNumberOfCartItemsByCartId(cartId : number) : Observable<ApiResponse<number>>{
+    return this.http.get<ApiResponse<number>>(`${this.apiUrl}/countItems/${cartId}`);
+  }
 }
