@@ -34,8 +34,6 @@ export class CartComponent {
     })
   }
 
-
-
   getCartByUserById(id : number) : void {
     this.cartService.getCartByUserById(id).subscribe({
       next: (response) => {
@@ -48,6 +46,17 @@ export class CartComponent {
     })
   }
 
+  clearCart() : void {
+    this.cartService.clearCart(1).subscribe({
+      next: (response) => {
+        alert(response.message);
+        this.getCartByUserById(1);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    })
+  }
 
 }
 

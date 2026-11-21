@@ -135,7 +135,7 @@ export class CreateProduct implements OnInit {
           category: '',
           active: true
         });
-        this.router.navigate(['/products']);
+        this.router.navigate(['/store']);
       },
       error: error => {
         console.error('Error creating product:', error);
@@ -151,7 +151,7 @@ export class CreateProduct implements OnInit {
     this.productService.updateProduct(id, product).subscribe({
       next: response => {
         alert(response.message);
-        this.router.navigate(['/products']);
+        this.router.navigate(['/store']);
       },
       error: error => {
         console.error('Error updating product:', error);

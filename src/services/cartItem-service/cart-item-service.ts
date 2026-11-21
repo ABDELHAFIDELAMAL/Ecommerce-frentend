@@ -15,12 +15,18 @@ export class CartItemService {
     return this.http.get<ApiResponse<CartItem[]>>(this.apiUrl);
   }
 
-  addProductToCart(cartId : number , productId : number , quantity : number ) : Observable<ApiResponse<Cart>>{
-    const params = new HttpParams()
-      .set('cartId' , cartId)
-      .set('productId' , productId)
-      .set('quantity' , quantity);
-    return this.http.post<ApiResponse<Cart>>(`${this.apiUrl}/addToCart` , { params });
+  addProductToCart(cartId: number, productId: number, quantity: number) {
+    return this.http.post<ApiResponse<CartItem>>(
+      `${this.apiUrl}/addToCart`,
+      null,
+      {
+        params: {
+          cartId: cartId.toString(),
+          productId: productId.toString(),
+          quantity: quantity.toString()
+        }
+      }
+    );
   }
 
   getCartItemById(id : number) : Observable<ApiResponse<CartItem>>{

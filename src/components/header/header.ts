@@ -1,5 +1,5 @@
 import {Component, inject, signal} from '@angular/core';
-import {RouterLink} from '@angular/router';
+import {RouterLink, RouterLinkActive} from '@angular/router';
 import {Category} from '../../entities/Category';
 import {CategoryService} from '../../services/category-service/category-service';
 import {ProductService} from '../../services/product-service/product-service';
@@ -7,7 +7,8 @@ import {CartService} from '../../services/cart-service/cart-service';
 
 @Component({
   imports: [
-    RouterLink
+    RouterLink,
+    RouterLinkActive
   ],
   selector: 'app-header',
   styleUrl: './header.css',
@@ -19,9 +20,11 @@ export class Header {
   cartService = inject(CartService);
   productService = inject(ProductService);
   isMenuOpen = false;
+  NumberOfItemsInCart = signal<number>(0);
 
   ngOnInit() {
     this.getAllCategories();
+    this.getNumberOfItemsInCartById(1);
   }
 
   toggleMenu(): void {
@@ -41,6 +44,18 @@ export class Header {
       },
       error: err => {
         console.log(err);
+      }
+    })
+  }
+
+
+  getNumberOfItemsInCartById(number : number) : void {
+    this.cartService.getNumberOfCartItemsByCartId(number).subscribe({
+      next: (response) => {
+        this.NumberOfItemsInCart.set(response.data);
+      },
+      error: err => {
+        console.error(err);
       }
     })
   }
