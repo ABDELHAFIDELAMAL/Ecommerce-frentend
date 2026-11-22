@@ -1,20 +1,25 @@
 <div class="min-h-screen bg-gray-50 p-3 sm:p-6">
   <div class="mx-auto max-w-7xl">
-    <div class="mb-5 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
-      <h1 class="text-xl font-bold text-gray-900 sm:text-2xl">My Shopping Cart</h1>
-      @if (cart()) {
-        <p class="text-xs text-gray-500 sm:text-sm">{{ cart()!.cartItems.length }} item(s) in your cart</p>
-        <button
-          class="mt-6 inline-flex items-center justify-center rounded-lg bg-gray-800 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-gray-900 active:scale-95"
-          (click)="clearCart()"
-        >
-          Clear Cart
-        </button>
+    <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <h1 class="text-xl font-bold text-gray-900 sm:text-2xl">My Shopping Cart</h1>
+        @if (cart(); as currentCart) {
+          <p class="mt-1 text-xs text-gray-500 sm:text-sm">
+            {{ currentCart.cartItems.reduce((total, item) => total + item.quantity, 0) }} item(s) in your cart
+          </p>
+        }
+      </div>
+      @if (cart(); as currentCart) {
+        @if (currentCart.cartItems.length > 0) {
+          <button
+            type="button"
+            (click)="clearCart()"
+            class="inline-flex items-center justify-center rounded-lg bg-gray-800 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-gray-900 active:scale-95">
+            Clear Cart
+          </button>
+        }
       }
     </div>
-
-    <
-
     @if (cart(); as currentCart) {
       <div class="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-6">
         <div class="lg:col-span-2">
@@ -27,45 +32,64 @@
                       <img
                         [src]="'http://localhost:8090' + item.product.images[0].imageUrl"
                         [alt]="item.product.name"
-                        class="h-full w-full object-contain p-2"
-                      >
+                        class="h-full w-full object-contain p-2">
                     } @else {
                       <span class="text-xs text-gray-400">No image</span>
                     }
                   </div>
-
                   <div class="min-w-0 flex-1 sm:border-l sm:border-gray-100 sm:pl-4">
                     <div class="flex items-center gap-1">
                       <span class="h-1 w-4 rounded-full bg-red-500"></span>
                       <span class="h-1 w-1 rounded-full bg-gray-300"></span>
                       <span class="h-1 w-1 rounded-full bg-gray-300"></span>
                     </div>
-                    <h2 class="mt-2 line-clamp-1 text-sm font-medium text-gray-900 sm:text-base">{{ item.product.name }}</h2>
+                    <h2 class="mt-2 line-clamp-1 text-sm font-medium text-gray-900 sm:text-base">
+                      {{ item.product.name }}
+                    </h2>
                     @if (item.product.brand) {
-                      <p class="mt-0.5 text-[11px] uppercase tracking-wide text-gray-400">{{ item.product.brand }}</p>
+                      <p class="mt-0.5 text-[11px] uppercase tracking-wide text-gray-400">
+                        {{ item.product.brand }}
+                      </p>
                     }
                     <p class="mt-2 text-sm text-gray-500">
                       Unit price:
-                      <span class="font-medium text-gray-700 font-md">{{ item.unitPrice | number:'1.2-2' }} MAD</span>
+                      <span class="font-medium text-gray-700">
+                        {{ item.unitPrice | number:'1.2-2' }} MAD
+                      </span>
                     </p>
                     <div class="mt-3 flex items-center gap-3">
                       <span class="text-sm text-gray-500">Quantity:</span>
                       <div class="inline-flex items-center overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
-                        <button type="button" class="px-3 py-1.5 text-base text-gray-600 transition hover:bg-white hover:text-gray-900 active:scale-95">-</button>
-                        <span class="min-w-10 bg-white px-3 py-1.5 text-center text-sm font-medium text-gray-900">{{ item.quantity }}</span>
-                        <button type="button" class="px-3 py-1.5 text-base text-gray-600 transition hover:bg-white hover:text-gray-900 active:scale-95">+</button>
+                        <button
+                          type="button"
+                          (click)="updateQuantity(item.id, item.quantity - 1)"
+                          [disabled]="item.quantity <= 1"
+                          class="px-3 py-1.5 text-base text-gray-600 transition hover:bg-white hover:text-gray-900 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40">
+                          -
+                        </button>
+                        <span class="min-w-10 bg-white px-3 py-1.5 text-center text-sm font-medium text-gray-900">
+                          {{ item.quantity }}
+                        </span>
+                        <button
+                          type="button"
+                          (click)="updateQuantity(item.id, item.quantity + 1)"
+                          class="px-3 py-1.5 text-base text-gray-600 transition hover:bg-white hover:text-gray-900 active:scale-95">
+                          +
+                        </button>
                       </div>
                     </div>
                   </div>
-
                   <div class="flex items-center justify-between border-t border-gray-100 pt-3 sm:block sm:border-t-0 sm:pt-0 sm:text-right">
-                    <button class="text-red-500"
-                            (click)="deleteItemFromCart(item.id)"
-                    >
-                      <span>delete</span>
+                    <button
+                      type="button"
+                      (click)="deleteItemFromCart(item.id)"
+                      class="text-sm font-medium text-red-500 transition hover:text-red-700">
+                      Remove
                     </button>
                     <p class="text-xs text-gray-500">Total</p>
-                    <p class="text-lg font-semibold text-gray-900 sm:mt-1 sm:text-xl">{{ item.unitPrice * item.quantity | number:'1.2-2' }} MAD</p>
+                    <p class="text-lg font-semibold text-gray-900 sm:mt-1 sm:text-xl">
+                      {{ item.unitPrice * item.quantity | number:'1.2-2' }} MAD
+                    </p>
                   </div>
                 </div>
               }
@@ -74,21 +98,27 @@
             <div class="rounded-xl border border-dashed border-gray-200 bg-white p-8 text-center sm:p-12">
               <div class="mb-3 text-5xl">🛒</div>
               <h2 class="text-lg font-bold text-gray-900">Your cart is empty</h2>
-              <p class="mt-1 text-xs text-gray-500 sm:text-sm">You don't have any products in your cart.</p>
-              <button type="button" routerLink="/store" class="mt-6 inline-flex items-center justify-center rounded-lg bg-gray-800 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-gray-900 active:scale-95">
+              <p class="mt-1 text-xs text-gray-500 sm:text-sm">
+                You don't have any products in your cart.
+              </p>
+              <button
+                type="button"
+                routerLink="/store"
+                class="mt-6 inline-flex items-center justify-center rounded-lg bg-gray-800 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-gray-900 active:scale-95">
                 Continue Shopping
               </button>
             </div>
           }
         </div>
-
         <div class="lg:col-span-1">
           <div class="rounded-xl border border-gray-200 bg-white p-4 sm:p-5 lg:sticky lg:top-6">
             <h2 class="text-base font-semibold text-gray-900 sm:text-lg">Order Summary</h2>
             <div class="mt-4 space-y-3 border-t border-gray-100 pt-4">
               <div class="flex justify-between text-sm text-gray-600">
                 <span>Subtotal</span>
-                <span class="font-medium text-gray-900">{{ currentCart.totalPrice | number:'1.2-2' }} €</span>
+                <span class="font-medium text-gray-900">
+                  {{ currentCart.totalPrice | number:'1.2-2' }} MAD
+                </span>
               </div>
               <div class="flex justify-between text-sm text-gray-600">
                 <span>Shipping</span>
@@ -97,11 +127,16 @@
               <div class="border-t border-gray-100 pt-3">
                 <div class="flex items-center justify-between">
                   <span class="text-sm font-semibold text-gray-900 sm:text-base">Total</span>
-                  <span class="text-xl font-bold text-gray-900 sm:text-2xl">{{ currentCart.totalPrice | number:'1.2-2' }} MAD</span>
+                  <span class="text-xl font-bold text-gray-900 sm:text-2xl">
+                    {{ currentCart.totalPrice | number:'1.2-2' }} MAD
+                  </span>
                 </div>
               </div>
             </div>
-            <button type="button" class="mt-5 w-full rounded-lg bg-gray-800 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-gray-900 active:scale-95">
+            <button
+              type="button"
+              [disabled]="currentCart.cartItems.length === 0"
+              class="mt-5 w-full rounded-lg bg-gray-800 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-gray-900 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40">
               Proceed to Checkout
             </button>
           </div>

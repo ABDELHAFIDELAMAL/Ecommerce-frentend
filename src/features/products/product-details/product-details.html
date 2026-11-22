@@ -120,7 +120,7 @@
 
           <button
             type="button"
-            (click)="addProductToCart(p.id , 1 , quantity())"
+            (click)="addProductToCart(1 , p.id , quantity() )"
             [disabled]="!p.active || p.quantity === 0"
             class="flex h-14 flex-1 items-center justify-center gap-3 rounded-lg bg-amber-400 px-5 font-semibold text-gray-900 transition hover:bg-amber-500 disabled:cursor-not-allowed"
           >

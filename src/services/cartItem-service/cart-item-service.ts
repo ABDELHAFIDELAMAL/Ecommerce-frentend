@@ -33,6 +33,17 @@ export class CartItemService {
     return this.http.get<ApiResponse<CartItem>>(`${this.apiUrl}/${id}`);
   }
 
+  updateQuantity(cartItemId: number, quantity: number) :Observable<ApiResponse<CartItem>>{
+    return this.http.put<ApiResponse<CartItem>>(`${this.apiUrl}/update/quantity/${cartItemId}`,
+      null,
+      {
+        params: {
+          quantity: quantity
+        }
+      }
+    );
+  }
+
   updateCartItem(id : number , cartItem : CartItem) : Observable<ApiResponse<CartItem>>{
     return this.http.put<ApiResponse<CartItem>>(`${this.apiUrl}/update/${id}`, cartItem);
   }
