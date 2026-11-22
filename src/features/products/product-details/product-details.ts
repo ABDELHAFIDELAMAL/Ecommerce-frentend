@@ -5,6 +5,7 @@ import {ProductService} from '../../../services/product-service/product-service'
 import {Product} from '../../../entities/Product';
 import {CurrencyPipe, DatePipe} from '@angular/common';
 import {CartItemService} from '../../../services/cartItem-service/cart-item-service';
+import {CartService} from '../../../services/cart-service/cart-service';
 
 @Component({
   imports: [
@@ -18,6 +19,7 @@ import {CartItemService} from '../../../services/cartItem-service/cart-item-serv
 export class ProductDetails {
   private imageService = inject(ImageService);
   private productService = inject(ProductService);
+  private cartService = inject(CartService);
   private cartItemService = inject(CartItemService);
   product = signal<Product | null >(null);
   private route = inject(ActivatedRoute)
@@ -35,7 +37,6 @@ export class ProductDetails {
   decreaseQuantity() {
     this.quantity.update(value => Math.max(1, value - 1));
   }
-
 
 
   ngOnInit() {
@@ -74,6 +75,7 @@ export class ProductDetails {
     this.cartItemService.addProductToCart(cartId, productId, quantity).subscribe({
       next: (response) => {
         alert(response.message);
+        this.cartService.notifyCartUpdated();
       },
       error: (error) => {
         console.error(error);
