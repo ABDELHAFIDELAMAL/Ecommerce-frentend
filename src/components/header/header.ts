@@ -48,7 +48,6 @@ export class Header {
     })
   }
 
-
   getNumberOfItemsInCartById(number : number) : void {
     this.cartService.getNumberOfCartItemsByCartId(number).subscribe({
       next: (response) => {
