@@ -3,12 +3,13 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ImageService} from '../../../services/image-service/image-service';
 import {ProductService} from '../../../services/product-service/product-service';
 import {Product} from '../../../entities/Product';
-import {CurrencyPipe} from '@angular/common';
+import {CurrencyPipe, DatePipe} from '@angular/common';
 import {CartItemService} from '../../../services/cartItem-service/cart-item-service';
 
 @Component({
   imports: [
-    CurrencyPipe
+    CurrencyPipe,
+    DatePipe
   ],
   selector: 'app-product-details',
   styleUrl: './product-details.css',

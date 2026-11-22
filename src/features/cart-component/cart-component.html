@@ -5,6 +5,7 @@
       @if (cart()) {
         <p class="text-xs text-gray-500 sm:text-sm">{{ cart()!.cartItems.length }} item(s) in your cart</p>
         <button
+          class="mt-6 inline-flex items-center justify-center rounded-lg bg-gray-800 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-gray-900 active:scale-95"
           (click)="clearCart()"
         >
           Clear Cart
@@ -58,6 +59,11 @@
                   </div>
 
                   <div class="flex items-center justify-between border-t border-gray-100 pt-3 sm:block sm:border-t-0 sm:pt-0 sm:text-right">
+                    <button class="text-red-500"
+                            (click)="deleteItemFromCart(item.id)"
+                    >
+                      <span>delete</span>
+                    </button>
                     <p class="text-xs text-gray-500">Total</p>
                     <p class="text-lg font-semibold text-gray-900 sm:mt-1 sm:text-xl">{{ item.unitPrice * item.quantity | number:'1.2-2' }} MAD</p>
                   </div>
@@ -69,7 +75,7 @@
               <div class="mb-3 text-5xl">🛒</div>
               <h2 class="text-lg font-bold text-gray-900">Your cart is empty</h2>
               <p class="mt-1 text-xs text-gray-500 sm:text-sm">You don't have any products in your cart.</p>
-              <button type="button" class="mt-6 inline-flex items-center justify-center rounded-lg bg-gray-800 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-gray-900 active:scale-95">
+              <button type="button" routerLink="/store" class="mt-6 inline-flex items-center justify-center rounded-lg bg-gray-800 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-gray-900 active:scale-95">
                 Continue Shopping
               </button>
             </div>
