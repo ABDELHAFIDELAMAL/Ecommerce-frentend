@@ -54,6 +54,14 @@ export class CartComponent {
       this.cartItemService.deleteCartItem(id).subscribe({
         next: (response) => {
           alert(response.message);
+          this.cart.update(cart => {
+            if (!cart) return cart;
+
+            return {
+              ...cart,
+              cartItems: cart.cartItems.filter(item => item.id !== id)
+            };
+          });
         },
         error: (error) => {
           console.error(error);

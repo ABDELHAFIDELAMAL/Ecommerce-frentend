@@ -5,7 +5,7 @@ import { ImageService } from '../../../services/image-service/image-service';
 import {Image} from '../../../entities/Image';
 import {Category} from '../../../entities/Category';
 import {CategoryService} from '../../../services/category-service/category-service';
-import {RouterLink} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {Observable} from 'rxjs';
 import {CartItemService} from '../../../services/cartItem-service/cart-item-service';
 import {CartService} from '../../../services/cart-service/cart-service';
@@ -24,6 +24,7 @@ export class ProductList {
   imageService = inject(ImageService);
   cartItemService = inject(CartItemService);
   cartService = inject(CartService);
+  route = inject(Router);
 
   products = signal<Product[]>([]);
   categories = signal<Category[]>([]);
@@ -64,6 +65,9 @@ export class ProductList {
       this.productService.deleteProduct(id).subscribe({
         next: (response) => {
           alert(response.message);
+          this.products.update(products =>
+            products.filter(product => product.id !== id)
+          );
         },
         error: (response) => {
           alert(response.message);
@@ -186,6 +190,7 @@ export class ProductList {
     this.cartItemService.addProductToCart(this.cartId, productId, quantity).subscribe({
       next: (response) => {
         alert(response.message);
+        this.route.navigateByUrl('/my/cart').then(r => {});
       },
       error: (error) => {
         console.error(error);
