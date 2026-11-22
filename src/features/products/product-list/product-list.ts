@@ -135,17 +135,25 @@ export class ProductList {
   }
 
 
-  deleteImageById(id: number){
-    if(confirm('Are you sure you want to delete this image?')){
-      this.imageService.deleteImage(id).subscribe({
-        next: (response) => {
+  deleteImageById(id: number): void {
+    if (!confirm('Are you sure you want to delete this image?')) return;
+    this.imageService.deleteImage(id).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.products.update(products =>
+            products.map(product => ({
+              ...product,
+              images: product.images.filter(image => image.id !== id)
+            }))
+          );
+
           alert(response.message);
-        },
-        error: (response) => {
-          console.log(response.message);
-        },
-      })
-    }
+        }
+      },
+      error: (error) => {
+        console.error('Error deleting image:', error);
+      }
+    });
   }
 
   deleteAllProducts() : void {
