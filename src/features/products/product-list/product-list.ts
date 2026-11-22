@@ -162,6 +162,7 @@ export class ProductList {
         next: (response) => {
           alert(response.message);
           this.getAllProducts();
+          this.cartService.notifyCartUpdated();
         },
         error: (response) => {
           console.log(response.message);
@@ -198,6 +199,7 @@ export class ProductList {
     this.cartItemService.addProductToCart(this.cartId, productId, quantity).subscribe({
       next: (response) => {
         alert(response.message);
+        this.cartService.notifyCartUpdated();
         this.route.navigateByUrl('/my/cart').then(r => {});
       },
       error: (error) => {

@@ -37,7 +37,6 @@ export class CartComponent implements OnInit {
   private updateCartLocally(cartItems: Cart['cartItems']): void {
     this.cart.update(cart => {
       if (!cart) return cart;
-
       const totalPrice = cartItems.reduce(
         (total, item) => total + item.unitPrice * item.quantity,
         0
@@ -56,6 +55,7 @@ export class CartComponent implements OnInit {
     this.cartItemService.deleteCartItem(id).subscribe({
       next: (response) => {
         if (response.success) {
+          this.cartService.notifyCartUpdated();
           const currentCart = this.cart();
           if (!currentCart) return;
           const updatedItems = currentCart.cartItems.filter(
@@ -96,6 +96,7 @@ export class CartComponent implements OnInit {
     this.cartService.clearCart(1).subscribe({
       next: (response) => {
         if (response.success) {
+          this.cartService.notifyCartUpdated();
           this.cart.update(cart => {
             if (!cart) return cart;
             return {

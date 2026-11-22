@@ -1,7 +1,7 @@
 import {inject, Service} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environment/environment';
-import {Observable} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {ApiResponse} from '../../entities/ApiResponse';
 import {Cart} from '../../entities/Cart';
 
@@ -9,6 +9,13 @@ import {Cart} from '../../entities/Cart';
 export class CartService {
   private apiUrl = `${environment.apiUrl}/carts`;
   private http = inject(HttpClient);
+  private cartUpdated = new Subject<void>();
+
+  cartUpdated$ = this.cartUpdated.asObservable();
+
+  notifyCartUpdated(): void {
+    this.cartUpdated.next();
+  }
 
 
   getAllCarts():Observable<ApiResponse<Cart[]>>{

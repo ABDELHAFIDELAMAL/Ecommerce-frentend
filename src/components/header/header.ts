@@ -4,6 +4,7 @@ import {Category} from '../../entities/Category';
 import {CategoryService} from '../../services/category-service/category-service';
 import {ProductService} from '../../services/product-service/product-service';
 import {CartService} from '../../services/cart-service/cart-service';
+import {Subject} from 'rxjs';
 
 @Component({
   imports: [
@@ -22,9 +23,11 @@ export class Header {
   isMenuOpen = false;
   NumberOfItemsInCart = signal<number>(0);
 
-  ngOnInit() {
-    this.getAllCategories();
+  ngOnInit(): void {
     this.getNumberOfItemsInCartById(1);
+    this.cartService.cartUpdated$.subscribe(() => {
+      this.getNumberOfItemsInCartById(1);
+    });
   }
 
   toggleMenu(): void {
