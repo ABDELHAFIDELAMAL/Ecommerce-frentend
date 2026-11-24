@@ -1,1 +1,86 @@
-<p>login works!</p>
+
+<div class="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-10">
+  <div class="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl">
+    <div class="mb-8 text-center">
+      <h1 class="text-3xl font-bold text-gray-900">Welcome Back</h1>
+      <p class="mt-2 text-sm text-gray-500">Login to your account</p>
+    </div>
+
+    <form (ngSubmit)="login()" class="space-y-5">
+      <div>
+        <label class="mb-2 block text-sm font-semibold text-gray-700">Email</label>
+        <input
+          type="email"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="Enter your email"
+          required
+          class="w-full text-black rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+        >
+      </div>
+
+      <div>
+        <label class="mb-2 block text-sm font-semibold text-gray-700">Password</label>
+        <input
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          placeholder="Enter your password"
+          required
+          class="w-full text-black rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+        >
+      </div>
+
+      <div class="flex justify-end">
+        <a routerLink="/forgot-password" class="text-sm font-medium text-blue-600 hover:text-blue-800">
+          Forgot password?
+        </a>
+      </div>
+
+      <button
+        type="submit"
+        class="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-700 active:scale-[0.98]"
+      >
+        Login
+      </button>
+    </form>
+
+    <div class="my-6 flex items-center gap-3">
+      <div class="h-px flex-1 bg-gray-200"></div>
+      <span class="text-sm text-gray-400">OR CONTINUE WITH</span>
+      <div class="h-px flex-1 bg-gray-200"></div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <button
+        type="button"
+        class="flex items-center justify-center gap-2 rounded-lg border border-gray-300 py-3 font-medium text-gray-700 transition hover:bg-gray-50"
+      >
+        <svg viewBox="0 0 48 48" class="h-5 w-5">
+          <path fill="#4285F4" d="M43.6 24.5c0-1.4-.1-2.8-.4-4.1H24v7.8h11a9.4 9.4 0 0 1-4.1 6.2v5.1h6.6c3.9-3.6 6.1-8.8 6.1-15z"/>
+          <path fill="#34A853" d="M24 44c5.5 0 10.1-1.8 13.5-4.9l-6.6-5.1c-1.8 1.2-4.1 2-6.9 2-5.3 0-9.8-3.6-11.4-8.4H5.8v5.3A20 20 0 0 0 24 44z"/>
+          <path fill="#FBBC05" d="M12.6 27.6a12 12 0 0 1 0-7.2v-5.3H5.8a20 20 0 0 0 0 17.8z"/>
+          <path fill="#EA4335" d="M24 12.1c3 0 5.7 1 7.8 3.1l5.8-5.8C34.1 6 29.5 4 24 4A20 20 0 0 0 5.8 15.1l6.8 5.3c1.6-4.8 6.1-8.3 11.4-8.3z"/>
+        </svg>
+        Google
+      </button>
+
+      <button
+        type="button"
+        class="flex items-center justify-center gap-2 rounded-lg border border-gray-300 py-3 font-medium text-gray-700 transition hover:bg-gray-50"
+      >
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="#1877F2">
+          <path d="M24 12a12 12 0 1 0-13.875 11.85v-8.386H7.078V12h3.047V9.356c0-3.007 1.792-4.669 4.533-4.669 1.313 0 2.686.235 2.686.235v2.953h-1.513c-1.49 0-1.956.925-1.956 1.874V12h3.328l-.532 3.464h-2.796v8.386A12 12 0 0 0 24 12"/>
+        </svg>
+        Facebook
+      </button>
+    </div>
+
+    <p class="mt-8 text-center text-sm text-gray-600">
+      Don't have an account?
+      <a routerLink="/register" class="font-semibold text-blue-600 hover:text-blue-800">
+        Register
+      </a>
+    </p>
+  </div>
+</div>
