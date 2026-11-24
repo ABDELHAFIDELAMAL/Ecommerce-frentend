@@ -45,6 +45,7 @@ export class ProductList {
   protected getAllProducts() {
     this.productService.getAllProducts().subscribe({
       next: (response) => {
+        console.log(response.data);
         this.products.set(response.data);
         this.loading.set(false);
       },

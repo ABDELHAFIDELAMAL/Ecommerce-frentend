@@ -8,6 +8,7 @@ import {CreatePromotion} from '../features/promotion/create-promotion/create-pro
 import {ReviewList} from '../features/review/review-list/review-list';
 import {ProductDetails} from '../features/products/product-details/product-details';
 import {Home} from '../components/home/home';
+import {Login} from '../features/login/login/login';
 
 export const routes: Routes = [
   { path : '' , component : Store },
@@ -24,4 +25,6 @@ export const routes: Routes = [
 
   { path: 'products/update/:id', component: CreateProduct },
   { path: 'products/details/:id', component: ProductDetails },
+
+  { path: 'login' , component : Login },
 ];

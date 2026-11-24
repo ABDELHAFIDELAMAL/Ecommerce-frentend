@@ -17,7 +17,6 @@ export class CartService {
     this.cartUpdated.next();
   }
 
-
   getAllCarts():Observable<ApiResponse<Cart[]>>{
     return this.http.get<ApiResponse<Cart[]>>(this.apiUrl);
   }
